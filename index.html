@@ -1620,7 +1620,7 @@ function renderNoConformes(){
         <div class="readonly-box"><strong>Fecha del registro</strong><br>${hoy}</div>
       </div>
 
-      <h3 style="margin-top:14px;">Producto</h3>
+      <h3 style="margin-top:14px;">1. Identificar el producto</h3>
       <div class="field">
         <label>Código de barras, código interno o descripción</label>
         <div style="display:flex; gap:8px;">
@@ -1628,7 +1628,7 @@ function renderNoConformes(){
           <button class="btn" style="width:auto;" onclick="ncBuscar()">Buscar</button>
         </div>
       </div>
-      <label class="btn ghost" style="display:block; text-align:center; cursor:pointer;">📷 Escanear código con foto
+      <label class="btn ghost" style="display:block; text-align:center; cursor:pointer;">📷 Escanear código de barras (solo lee el código)
         <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="ncLeerCodigoFoto(event)">
       </label>
       <div id="ncEstadoScan" class="muted" style="margin-top:6px;"></div>
@@ -1636,15 +1636,20 @@ function renderNoConformes(){
 
       <div id="ncFicha" style="margin-top:10px;"></div>
 
-      <div id="ncCampos" style="display:none;">
+      <div id="ncCampos">
+        <h3 style="margin-top:18px;">2. Cantidad y motivo</h3>
         <div class="grid2">
           <div class="field"><label>Cantidad averiada o en mal estado</label><input type="number" id="ncCantidad" min="1" step="1" inputmode="numeric"></div>
           <div class="field"><label>Motivo</label>
             <select id="ncMotivo"><option value="">Seleccione…</option>${MOTIVOS_NC.map(m=>`<option>${m}</option>`).join('')}</select></div>
         </div>
-        <label class="btn ghost" style="display:block; text-align:center; cursor:pointer;">📸 Tomar foto del producto (queda con fecha y hora)
-          <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="ncFotoSeleccionada(event)">
-        </label>
+        <h3 style="margin-top:6px;">3. Foto del producto en mal estado</h3>
+        <div class="readonly-box" style="border-color:var(--green); background:#eefaf1;">
+          <p class="muted" style="margin:0 0 8px 0;">Esta es la foto de evidencia (distinta al escaneo del código). Queda grabada con la <strong>fecha y hora</strong> en que se toma.</p>
+          <label class="btn green" style="display:block; text-align:center; cursor:pointer;">📸 Tomar foto del producto en mal estado
+            <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="ncFotoSeleccionada(event)">
+          </label>
+        </div>
         <div id="ncFotoInfo" class="muted" style="margin-top:6px;"></div>
         <img id="ncFotoPrev" class="photo-preview" style="display:none;">
         <button class="btn green" id="ncBtnGuardar" style="margin-top:14px;" onclick="ncGuardar()">Guardar registro</button>
@@ -1723,7 +1728,6 @@ function ncSeleccionarProducto(p){
       <input type="text" id="ncDescripcion" value="${escHtml(p.descripcion)}" ${p.manual?'placeholder="Escribe la descripción"':'readonly'} style="width:100%; margin-top:4px; padding:8px; border:1px solid var(--line); border-radius:6px;">
       <div class="muted" style="margin-top:6px;">Código barras: ${escHtml(p.codigoBarra||'—')} · Código interno: ${escHtml(p.codigoInterno||'—')} · Costo unit.: ${formatearMoneda(p.costoUnitario||0)}</div>
     </div>`;
-  document.getElementById('ncCampos').style.display = 'block';
 }
 
 /* ---------- Foto con sello de fecha y hora ---------- */
